@@ -306,7 +306,7 @@ el('prods').innerHTML=PRODS.map(([t,h])=>`<div class="row prod" style="cursor:de
 function show(){const v=(location.hash||'#sodien').slice(1);const ok=['sodien','grafiks','foto','produkti','profils'].includes(v)?v:'sodien';
  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+ok));
  document.querySelectorAll('nav.tabs a').forEach(a=>{if(a.dataset.v===ok)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
- window.scrollTo(0,0);render()}
+ window.scrollTo(0,0);render();if(typeof renderPhotos==='function')renderPhotos()}
 function render(){renderToday();renderWeek();renderProfile()}
 
 el('list').addEventListener('click',e=>{
@@ -362,7 +362,6 @@ el('vDel').addEventListener('click',async()=>{if(!cur)return;if(!delArm){delArm=
 
 window.addEventListener('hashchange',show);
 show();
-renderPhotos();
 if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('../sw.js').catch(()=>{})}
 }
 </script>
