@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="lv" data-profile="{{P}}" data-voc="{{VOC}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rutīna</title>
+<meta name="theme-color" content="#F4EFE8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E1A17" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Rutīna">
+<link rel="apple-touch-icon" href="../icon.png?v=1">
+<link rel="icon" href="../icon-192.png?v=1">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* VOICE calm, tender, elegant — a morning-and-night ritual
+   IDEA the mirror sticker come to life: a cosmetic label you tick off
+   PICTURE today's checklist itself, large, under a modest title
+   COLOUR sand ground, warm ink, one clay accent; same idea at night
+   TYPE Cormorant Garamond for titles and numerals, Inter for steps */
+:root{color-scheme:light dark;
+--bg:light-dark(#F4EFE8,#1E1A17);--card:light-dark(#FBF8F4,#29231F);--ink:light-dark(#2B2622,#F1E9E0);
+--muted:light-dark(#6B625B,#B3A79B);--line:light-dark(#D9CFC4,#3D352F);--accent:light-dark(#8C6A55,#C29C82);
+--accentInk:light-dark(#FFFFFF,#1E1A17);--sand:light-dark(#D9CBBE,#5A4C40);--sandInk:light-dark(#2B2622,#F1E9E0);--done:light-dark(#EFE8DF,#241F1B)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 20px) max(20px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 32px) max(20px,env(safe-area-inset-left))}
+.serif{font-family:'Cormorant Garamond',Georgia,serif}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px}
+.date{font-size:13px;color:var(--muted)}
+h1{margin:2px 0 0;font:500 40px/1.05 'Cormorant Garamond',Georgia,serif;text-wrap:balance}
+h1 i{color:var(--accent)}
+.streak{text-align:right;flex:none}
+.streak b{display:block;font:600 30px/1 'Cormorant Garamond',Georgia,serif;color:var(--accent)}
+.streak span{font-size:12px;color:var(--muted)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border-radius:999px;padding:4px;margin-bottom:16px}
+.seg button{all:unset;cursor:pointer;text-align:center;min-height:44px;border-radius:999px;font-weight:500;font-size:15px;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,color .2s}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.seg button:focus-visible,.row:focus-visible,.day:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card{background:var(--card);border-radius:22px;padding:20px 18px 10px}
+.kind{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.kind h2{margin:0;font:600 26px/1.1 'Cormorant Garamond',Georgia,serif}
+.chip{font-size:12px;font-weight:500;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.chip.R{background:var(--accent);color:var(--accentInk)}.chip.S{background:var(--sand);color:var(--sandInk)}.chip.A{border:1px solid var(--line);color:var(--muted)}.chip.M{border:1px solid var(--line);color:var(--muted)}
+.bar{height:4px;border-radius:4px;background:var(--line);margin:12px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .35s ease}
+.row{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:36px 1fr 28px;align-items:center;gap:12px;min-height:64px;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:600 20px/1 'Cormorant Garamond',Georgia,serif;color:var(--accent);background:var(--done)}
+.row .t{font-weight:600;font-size:15px;line-height:1.3}
+.row .h{font-size:13px;color:var(--muted);line-height:1.35}
+.tick{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s}
+.tick svg{opacity:0;transition:opacity .2s}
+.row[aria-checked=true] .t{text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+.row[aria-checked=true] .tick{background:var(--accent);border-color:var(--accent)}
+.row[aria-checked=true] .tick svg{opacity:1}
+.row.wait{cursor:default}.row.wait .num{background:none;border:1px dashed var(--line)}
+.row[aria-disabled=true]{cursor:default}
+.donemsg{display:none;text-align:center;padding:14px 0 8px;font:500 italic 20px/1.3 'Cormorant Garamond',Georgia,serif;color:var(--accent)}
+.card.complete .donemsg{display:block}
+.note{font-size:13px;color:var(--muted);text-align:center;margin:10px 0 0}
+h3{font:600 24px/1.1 'Cormorant Garamond',Georgia,serif;margin:28px 0 12px;display:flex;justify-content:space-between;align-items:baseline}
+h3 small{font:400 12px Inter,sans-serif;color:var(--muted)}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.day{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 0 10px;border-radius:16px;min-height:44px}
+.day .dn{font-size:12px;color:var(--muted);font-weight:500}
+.day .dl{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:600 19px/1 'Cormorant Garamond',Georgia,serif}
+.dl.R{background:var(--accent);color:var(--accentInk)}.dl.S{background:var(--sand);color:var(--sandInk)}.dl.A{border:1px solid var(--line);color:var(--muted)}
+.day.today{background:var(--card)}.day.today .dn{color:var(--ink);font-weight:600}
+.day[aria-pressed=true]{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.dot{width:5px;height:5px;border-radius:50%;background:transparent}.dot.on{background:var(--accent)}
+.legend{display:grid;gap:10px;margin-top:14px}
+.legend div{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:center;font-size:13px;color:var(--muted)}
+.legend b{color:var(--ink);font-weight:600}
+.sw{height:12px;border-radius:6px}.sw.R{background:var(--accent)}.sw.S{background:var(--sand)}.sw.A{border:1px solid var(--line)}
+.rules{border-top:1px solid var(--line);margin-top:26px;padding-top:16px;display:grid;gap:8px;font-size:14px}
+.rules b{color:var(--accent);font-weight:600}
+.set{margin-top:26px;display:grid;gap:10px}
+.set label{font-size:13px;color:var(--muted)}
+.set .line{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+input[type=date]{font:16px Inter,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;min-height:44px;padding:0 12px}
+.btn{all:unset;cursor:pointer;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--line);font-size:14px;color:var(--muted);display:inline-flex;align-items:center}
+footer{margin-top:28px;text-align:center;font-size:12px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div>
+<div class="date" id="date"></div>
+<h1 id="greet">Mana ādas <i>rutīna</i></h1>
+</div>
+<div class="streak" aria-live="polite"><b id="streak">0</b><span>dienu sērija</span></div>
+</header>
+
+<div class="seg" role="group" aria-label="Laiks">
+<button id="tabM" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Rīts</button>
+<button id="tabE" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Vakars</button>
+</div>
+
+<section class="card" id="card" aria-labelledby="kindTitle">
+<div class="kind"><h2 id="kindTitle"></h2><span class="chip" id="chip"></span></div>
+<div class="bar" aria-hidden="true"><i id="bar" style="width:0"></i></div>
+<div id="list" role="list"></div>
+<div class="donemsg">Gatavs. Āda tev pateicas.</div>
+</section>
+<p class="note" id="note"></p>
+
+<h3>Vakaru grafiks <small id="weekNo"></small></h3>
+<div class="week" id="week"></div>
+<div class="legend">
+<div><span class="sw R"></span><span><b>Retināls</b> — Retinal 0.2%, zirņa lielumā</span></div>
+<div><span class="sw S"></span><span><b>Skābe</b> — Salicylic Acid 2%, 2–3 pilieni</span></div>
+<div><span class="sw A"></span><span><b>Atpūta</b> — tikai serums un krēms</span></div>
+</div>
+
+<div class="rules">
+<div><b>Nekad</b> retinālu un skābi vienā vakarā.</div>
+<div><b>Vienmēr</b> ļauj ādai pēc mazgāšanas nožūt, pirms aktīvajām vielām.</div>
+<div><b>SPF</b> katru rītu, arī mākoņainā dienā.</div>
+</div>
+
+<div class="set">
+<label for="start">Rutīnas sākums (pēc 4 nedēļām svētdiena kļūst par retināla vakaru)</label>
+<div class="line"><input type="date" id="start"><button class="btn" id="reset">Notīrīt šodienas atzīmes</button></div>
+</div>
+<footer>{{NAME}} · <a href="../">mainīt profilu</a> · © VAITKEVIX</footer>
+</div>
+
+<script>
+{
+const ROOT=document.documentElement, P=ROOT.dataset.profile, VOC=ROOT.dataset.voc;
+const KEY='rutina:v1:'+P;
+try{if(P==='silvestrs'&&!localStorage.getItem(KEY)&&localStorage.getItem('rutina:v1'))localStorage.setItem(KEY,localStorage.getItem('rutina:v1'))}catch(e){}
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const st=load(); st.log=st.log||{};
+const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
+const now=new Date(), todayKey=iso(now);
+if(!st.start){st.start=todayKey;save();}
+
+const CL={t:'Glucoside Foaming Cleanser',h:'Nomazgā seju un viegli nosusini'};
+const WAIT={t:'Pagaidi, līdz āda nožūst',h:'Pāris minūtes, lai nekairina',wait:true};
+const NMF={t:'Natural Moisturizing Factors + HA',h:'Plāns slānis visai sejai'};
+const R={
+ M:{name:'Rīta rutīna',chip:'katru dienu',steps:[CL,{t:'Balancing & Clarifying Serum',h:'2–3 pilieni'},NMF,{t:'UV Filters SPF 45',h:'Vienmēr pēdējais, pietiekami visai sejai'}]},
+ R:{name:'Retināla vakars',chip:'Retināls',steps:[CL,WAIT,{t:'Retinal 0.2% Emulsion',h:'Zirņa lielumā, ne ap acīm un lūpām'},NMF]},
+ S:{name:'Skābes vakars',chip:'Skābe',steps:[CL,WAIT,{t:'Salicylic Acid 2% Solution',h:'2–3 pilieni, vairāk T zonā'},NMF]},
+ A:{name:'Atpūtas vakars',chip:'Atpūta',steps:[CL,{t:'Balancing & Clarifying Serum',h:'2–3 pilieni'},NMF]}
+};
+const BASE={1:'R',2:'A',3:'S',4:'R',5:'A',6:'S',0:'A'};
+const DN=['Sv','Pr','Ot','Tr','Ce','Pk','Se'];
+const weekNo=d=>Math.floor((new Date(iso(d))-new Date(st.start))/864e5/7)+1;
+const typeFor=d=>{const g=d.getDay();return g===0&&weekNo(d)>4?'R':BASE[g]};
+
+let mode=now.getHours()<15?'M':'E';
+let viewDate=new Date(now);
+const el=id=>document.getElementById(id);
+const ck='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5 6 10l5-6"/></svg>';
+
+const entry=k=>st.log[k]||(st.log[k]={});
+const stepsFor=(d,m)=>m==='M'?R.M.steps:R[typeFor(d)].steps;
+const complete=(k,d)=>{const e=st.log[k];if(!e)return false;
+ const ok=(arr,steps)=>arr&&steps.every((s,i)=>s.wait||arr[i]);
+ return ok(e.M,stepsFor(d,'M'))&&ok(e.E,stepsFor(d,'E'))};
+function streak(){let n=0,d=new Date(now);
+ if(!complete(iso(d),d))d.setDate(d.getDate()-1);
+ while(complete(iso(d),d)){n++;d.setDate(d.getDate()-1)}return n}
+
+function render(){
+ const isToday=iso(viewDate)===todayKey;
+ el('date').textContent=new Intl.DateTimeFormat('lv',{weekday:'long',day:'numeric',month:'long'}).format(viewDate).replace(/^./,c=>c.toUpperCase());
+ el('greet').innerHTML=isToday?(mode==='M'?`Labrīt, <i>${VOC}</i>`:`Labvakar, <i>${VOC}</i>`):'Priekšskatījums';
+ el('tabM').setAttribute('aria-pressed',mode==='M');el('tabE').setAttribute('aria-pressed',mode==='E');
+ const t=mode==='M'?'M':typeFor(viewDate), r=R[t];
+ el('kindTitle').textContent=r.name;
+ const chip=el('chip');chip.textContent=r.chip;chip.className='chip '+t;
+ const k=iso(viewDate), arr=(st.log[k]&&st.log[k][mode])||[];
+ let n=0,done=0;
+ el('list').innerHTML=r.steps.map((s,i)=>{
+  if(s.wait)return `<div class="row wait" role="listitem"><span class="num" aria-hidden="true"></span><span><div class="t">${s.t}</div><div class="h">${s.h}</div></span><span></span></div>`;
+  n++;const on=!!arr[i];if(on)done++;
+  return `<button class="row" role="checkbox" aria-checked="${on}" ${isToday?'':'aria-disabled="true"'} data-i="${i}"><span class="num">${n}</span><span><div class="t">${s.t}</div><div class="h">${s.h}</div></span><span class="tick">${ck}</span></button>`}).join('');
+ el('bar').style.width=(n?done/n*100:0)+'%';
+ el('card').classList.toggle('complete',isToday&&done===n);
+ el('note').textContent=isToday?(mode==='E'&&t==='R'?'Šovakar bez salicilskābes.':mode==='E'&&t==='S'?'Šovakar bez retināla.':''):'Atzīmēt var tikai šodienas soļus.';
+ const ws=new Date(now);ws.setDate(ws.getDate()-((ws.getDay()+6)%7));
+ el('week').innerHTML=[...Array(7)].map((_,i)=>{const d=new Date(ws);d.setDate(ws.getDate()+i);const ty=typeFor(d),key=iso(d);
+  return `<button class="day${key===todayKey?' today':''}" aria-pressed="${key===k}" data-d="${key}" aria-label="${DN[d.getDay()]}: ${R[ty].name}"><span class="dn">${DN[d.getDay()]}</span><span class="dl ${ty}">${ty}</span><span class="dot${complete(key,d)?' on':''}"></span></button>`}).join('');
+ el('weekNo').textContent=weekNo(now)+'. nedēļa';
+ el('streak').textContent=streak();
+ el('start').value=st.start;
+}
+el('list').addEventListener('click',e=>{const b=e.target.closest('button.row');if(!b||iso(viewDate)!==todayKey)return;
+ const en=entry(todayKey),a=en[mode]||(en[mode]=[]),i=+b.dataset.i;a[i]=!a[i];save();render()});
+el('week').addEventListener('click',e=>{const b=e.target.closest('.day');if(!b)return;viewDate=new Date(b.dataset.d+'T12:00');mode='E';render()});
+el('tabM').addEventListener('click',()=>{mode='M';render()});
+el('tabE').addEventListener('click',()=>{mode='E';render()});
+el('start').addEventListener('change',e=>{if(e.target.value){st.start=e.target.value;save();render()}});
+el('reset').addEventListener('click',()=>{delete st.log[todayKey];save();viewDate=new Date(now);render()});
+render();
+if('serviceWorker' in navigator&&location.protocol==='https:'&&!/claude/.test(location.host)){navigator.serviceWorker.register('../sw.js').catch(()=>{})}
+}
+</script>
+</body>
+</html>
